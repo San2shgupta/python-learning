@@ -7,12 +7,12 @@ pygame.init()
 pygame.mixer.init()
 
 music_file = None
-
+i= []
 def add_music():
     global music_file
     music_file = askopenfilename(defaultextension=".mp3", filetypes=[("Music Files", "*.mp3")])
     if music_file != "":
-        songs_list.insert(END, os.path.basename(music_file))
+        songs_list.insert(END, os.path.basename(str(music_file)))
 
 def delete_music():
     current_selection = songs_list.curselection()
@@ -40,22 +40,21 @@ def play_music():
         pygame.mixer.music.load(os.path.join(str(a), os.path.basename(music_file) ))
         pygame.mixer.music.play()
 def volup():
-    a=pygame.mixer.music.get_volume()
-    for a in range(1):
-        a+=0.03
-        while a!=1:
-            b = a+ 0.03
-            print(b)
-
-
+    default_volume = pygame.mixer.music.get_volume()
+    up_volume = default_volume + 0.08
+    pygame.mixer.music.set_volume(up_volume)
 
 def voldown():
-    # vol= 1
-    # while vol>0:
-    #     vol-= 0.01
-    #     print(vol)
+    default_volume = pygame.mixer.music.get_volume()
+    down_volume = default_volume - 0.08
+    pygame.mixer.music.set_volume(down_volume)
 
-        pygame.mixer.music.set_volume(0.06)
+def pause_music():
+    pygame.mixer.music.pause()
+
+def resume_music():
+    pygame.mixer.music.unpause()
+
 
 if __name__ == '__main__':
 
@@ -63,8 +62,7 @@ if __name__ == '__main__':
     root.geometry("400x400")
     root.minsize(400, 400)
     root.maxsize(400, 400)
-    root.title("Simple Music Player")
-    # root.wm_iconbitmap("file/music_player.ico")
+    root.title("Simple Music Player By Santosh")
 
     # Add ScrollBar to ListBox
 
@@ -84,10 +82,14 @@ if __name__ == '__main__':
     Button(frame, text="Delete", pady=8, padx=16, font="lucida 10", command=delete_music).pack(side=LEFT)
     Button(frame, text="vol+", pady=8, padx=16, font="lucida 10", command=volup).pack(side=LEFT)
     Button(frame, text="vol-", pady=8, padx=16, font="lucida 10", command=voldown).pack(side=LEFT)
-    frame.pack(padx=20)
+    frame.pack(padx=20,fill=Y)
 
-    # Play Button
-    Button(root, text="Play", font="lucida 10 bold", pady=8, padx=16, bg="grey", fg="white", command=play_music).pack(pady=10)
+    # Play & others Button
+    frame1 = Frame(root)
+    Button(frame1, text="▶play", font="lucida 10 bold", pady=8, padx=16, bg="grey", fg="white", command=play_music).pack(side=LEFT,pady=10)
+    Button(frame1, text="Pause", font="lucida 10 bold", pady=8, padx=16, bg="red", fg="white", command=pause_music).pack(side=LEFT,pady=10)
+    Button(frame1, text="Resume", font="lucida 10 bold", pady=8, padx=16, bg="grey", fg="white", command=resume_music).pack(side=LEFT,pady=10)
+    frame1.pack(padx=20)
 
     Label(root, text="Created By Santosh Gupta", font="lucida 10", bg="grey", fg="white").pack(fill=X, pady=25)
     Label(root, text="Santosh Gupta", font="lucida 10", bg="black", fg="white").pack()
